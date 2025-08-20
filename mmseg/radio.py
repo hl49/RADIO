@@ -19,6 +19,24 @@ from mmengine.model import BaseModule
 from mmseg.models.builder import BACKBONES
 from timm.models.vision_transformer import VisionTransformer
 import torch
+
+# # Force-disable SDPA (scaled_dot_product_attention) if unsupported
+# import torch.nn.functional as F
+
+# def fallback_attention(query, key, value, attn_mask=None, dropout_p=0.0, is_causal=False):
+#     # Manual attention fallback
+#     attn = torch.matmul(query, key.transpose(-2, -1)) / query.size(-1) ** 0.5
+#     if attn_mask is not None:
+#         attn = attn.masked_fill(attn_mask == 0, float("-inf"))
+#     attn = attn.softmax(dim=-1)
+#     if dropout_p > 0.0:
+#         attn = F.dropout(attn, p=dropout_p)
+#     return torch.matmul(attn, value)
+
+# F.scaled_dot_product_attention = fallback_attention
+
+
+
 import torch.distributed as dist
 
 from transformers import AutoModel

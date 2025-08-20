@@ -24,15 +24,15 @@ model = dict(
         init_cfg=dict(
             type="Pretrained",
         ),
-        repo_id="nvidia/RADIO",
+        repo_id="nvidia/RADIO-B",
         token=None,
     ),
     decode_head=dict(
         type='BNHead',
-        in_channels=[1280],
+        in_channels=[768],
         in_index=[0],
         input_transform='resize_concat',
-        channels=1280,
+        channels=768,
         dropout_ratio=0,
         num_classes=150,
         norm_cfg=dict(type='SyncBN', requires_grad=True),
@@ -71,7 +71,7 @@ param_scheduler = [
 ]
 
 # By default, models are trained on 8 GPUs with 2 images per GPU
-train_dataloader = dict(batch_size=2)
+train_dataloader = dict(batch_size=8)
 val_dataloader = dict(
     batch_size=1,
     dataset=dict(
@@ -79,7 +79,7 @@ val_dataloader = dict(
             dict(type="LoadImageFromFile"),
             dict(type="Resize", scale=(2048, 512), keep_ratio=True),
             # Pad inputs to a multiple of the patch size (14).
-            dict(type="Pad", size_divisor=14),
+            dict(type="Pad", size_divisor=16),
             # add loading annotation after ``Resize`` because ground truth
             # does not need to do resize data transform
             dict(type="LoadAnnotations", reduce_zero_label=True),
